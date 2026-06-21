@@ -14,7 +14,10 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPersistentFrameCallback((_) => _redirect());
+    // WidgetsBinding.instance.addPersistentFrameCallback((_) => _redirect());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _redirect());
+
   }
 
   void _redirect() {
@@ -30,10 +33,6 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: context.read<AuthProvider>().isLoading ? CircularProgressIndicator() : Text("Error"),
-      ),
-    );
+    return Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }
