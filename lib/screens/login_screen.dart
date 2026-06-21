@@ -123,7 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: context.colors.secondaryContainer,
                         foregroundColor: context.colors.onSurfaceVariant,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/home");
+                      },
                       child: Text(
                         "Create Account",
                         style: GoogleFonts.roboto(
