@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class CreateAccountScreen extends StatefulWidget {
+  const CreateAccountScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<CreateAccountScreen> createState() => _CreateAccountScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // final _nameFieldController = TextEditingController();
+  final _nameFieldController = TextEditingController();
   final _emailFieldController = TextEditingController();
   final _passwordFieldController = TextEditingController();
   final _confirmFieldController = TextEditingController();
@@ -29,9 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final auth = context.read<AuthProvider>();
-    final success = await auth.signIn(
+    final success = await auth.signUp(
       _emailFieldController.text.trim(),
       _passwordFieldController.text,
+      _nameFieldController.text.trim(),
     );
 
     if (!mounted) return;
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    // _nameFieldController.dispose();
+    _nameFieldController.dispose();
     _emailFieldController.dispose();
     _passwordFieldController.dispose();
     _confirmFieldController.dispose();
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const SizedBox(height: 48),
                   Text(
-                    "Sign In To You Account",
+                    "Create Account",
                     style: GoogleFonts.roboto(
                       textStyle: context.textTheme.headlineLarge?.copyWith(
                         color: context.colors.onSurface,
@@ -86,16 +87,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 48),
 
-                  // // Name Field
-                  // _RegisterTextField(
-                  //   controller: _nameFieldController,
-                  //   hint: "Name",
-                  //   prefixIcon: Icons.account_circle_rounded,
-                  //   keyboardType: TextInputType.name,
-                  // ),
-                  //
-                  // const SizedBox(height: 25),
-                  //
+                  // Name Field
+                  _RegisterTextField(
+                    controller: _nameFieldController,
+                    hint: "Name",
+                    prefixIcon: Icons.account_circle_rounded,
+                    keyboardType: TextInputType.name,
+                  ),
+
+                  const SizedBox(height: 25),
+
                   // Email Field
                   _RegisterTextField(
                     controller: _emailFieldController,
@@ -167,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: _submitting
                           ? CircularProgressIndicator()
                           : Text(
-                              "SignIn",
+                              "Create Account",
                               style: GoogleFonts.roboto(
                                 color: context.colors.onSurfaceVariant,
                                 textStyle: context.textTheme.labelLarge?.copyWith(fontSize: 24),
@@ -183,15 +184,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "New to Dismed?",
+                        "Already have an account?",
                         style: GoogleFonts.roboto(textStyle: context.textTheme.labelMedium),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/register');
+                          Navigator.pushReplacementNamed(context, '/login');
                         },
                         child: Text(
-                          "Create Account",
+                          "SignIn",
                           style: GoogleFonts.roboto(
                             decoration: TextDecoration.underline,
                             textStyle: context.textTheme.labelMedium,

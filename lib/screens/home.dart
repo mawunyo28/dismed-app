@@ -1,4 +1,10 @@
+import 'package:dismed/screens/care_giver.dart';
 import 'package:dismed/screens/dashboard.dart';
+import 'package:dismed/screens/devices.dart';
+import 'package:dismed/screens/register_screen.dart';
+import 'package:dismed/screens/medications.dart';
+import 'package:dismed/screens/schedules.dart';
+import 'package:dismed/screens/settings.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -31,7 +37,14 @@ class _HomeState extends State<Home> {
         selectedIndex: currentPageIndex,
       ),
       // Todo: Implement the other screens
-      body: [Dashboard()][currentPageIndex],
+      body: [
+        Dashboard(),
+        Medications(),
+        Schedules(),
+        Devices(),
+        CareGiver(),
+        Settings(),
+      ][currentPageIndex],
     );
   }
 }

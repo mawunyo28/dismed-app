@@ -1,19 +1,34 @@
 import 'package:dismed/core/app_theme.dart';
+import 'package:dismed/core/auth_provider.dart';
 import 'package:dismed/core/theme_provider.dart';
 import 'package:dismed/screens/home.dart';
 import 'package:dismed/screens/login_screen.dart';
+import 'package:dismed/screens/splash_page.dart';
+import 'package:dismed/screens/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load();
+
   await Supabase.initialize(
-    url:  "https://imjwkzsctggnyxvhunza.supabase.co",
-    publishableKey: "sb_publishable_bzL6dpvb4jLl5WB_ncnwrQ_jiYfcY_a"
+    url: dotenv.get("SUPABASE_URL"),
+    publishableKey: dotenv.get("SUPABASE_PUBLISHABLE_KEY"),
   );
-  runApp(ChangeNotifierProvider(create: (_) => ThemeProvider(), child: const MyApp()));
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,17 +38,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<ThemeProvider>();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "Dismed",
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: provider.mode,
-      initialRoute: "/",
+      initialRoute: "/splash",
       routes: {
-      "/": (context) => LoginScreen(),
-      "/login": (context)=> LoginScreen(),
-      "/home": (context) => Home(),
-    },
-      
+        "/splash": (context) => SplashPage(),
+        "/register": (context) => CreateAccountScreen(),
+
+        "/home": (context) => Home(),
+        "/login": (context) => LoginScreen(),
+      },
     );
   }
 }
