@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:dismed/services/supabase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final SupabaseClient _supabase = SupabaseService.client;
 
   User? _user;
   bool _loading = true;
