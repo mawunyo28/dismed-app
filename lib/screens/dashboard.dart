@@ -108,7 +108,10 @@ class _DashboardState extends State<Dashboard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(device.name, style: GoogleFonts.roboto(fontWeight: FontWeight.w600)),
+                          Text(
+                            device.label!,
+                            style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
+                          ),
                           Text(
                             device.isOnline ? 'Online' : 'Offline',
                             style: GoogleFonts.roboto(
@@ -155,7 +158,7 @@ class _DashboardState extends State<Dashboard> {
                   child: ListTile(
                     leading: Icon(Icons.medication_rounded, color: context.colors.primary),
                     title: Text(
-                      s.scheduledTime.substring(0, 5),
+                      s.dispenseTime.substring(0, 5),
                       style: GoogleFonts.roboto(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(
@@ -163,8 +166,8 @@ class _DashboardState extends State<Dashboard> {
                       style: GoogleFonts.roboto(textStyle: context.textTheme.bodySmall),
                     ),
                     trailing: Icon(
-                      s.isActive ? Icons.check_circle_rounded : Icons.pause_circle_rounded,
-                      color: s.isActive ? context.colors.primary : context.colors.outlineVariant,
+                      s.active ? Icons.check_circle_rounded : Icons.pause_circle_rounded,
+                      color: s.active ? context.colors.primary : context.colors.outlineVariant,
                     ),
                   ),
                 ),
@@ -280,4 +283,3 @@ class _EmptyCard extends StatelessWidget {
     );
   }
 }
-

@@ -14,9 +14,8 @@ class DeviceProvider extends ChangeNotifier {
 
   String? get selectedDeviceId => _selectedDeviceId;
 
-  Device? get selectedDevice => _selectedDeviceId == null
-      ? null
-      : _devices.firstWhere((d) => d.id == _selectedDeviceId);
+  Device? get selectedDevice =>
+      _selectedDeviceId == null ? null : _devices.firstWhere((d) => d.id == _selectedDeviceId);
 
   String? get selectedDeviceKey => selectedDevice?.deviceKey;
 
@@ -64,11 +63,12 @@ class DeviceProvider extends ChangeNotifier {
       if (index != -1) {
         _devices[index] = Device(
           id: _devices[index].id,
-          userId: _devices[index].userId,
+          ownerId: _devices[index].ownerId,
           deviceKey: _devices[index].deviceKey,
-          name: name,
-          lastSeen: _devices[index].lastSeen,
+          label: name,
+          lastSeenAt: _devices[index].lastSeenAt,
           createdAt: _devices[index].createdAt,
+          isOnline: _devices[index].isOnline,
         );
         notifyListeners();
       }

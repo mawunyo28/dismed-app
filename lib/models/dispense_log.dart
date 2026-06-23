@@ -1,43 +1,48 @@
-class DispenseLog {
+class DispenseEvent {
   final String id;
-  final String? scheduleId; // null if manual
-  final String compartmentId;
   final String deviceId;
-  final DateTime dispensedAt;
-  final String status; // 'success' | 'missed' | 'manual'
+  final String? compartmentId;
+  final int? slot;
+  final String status; // 'success' | 'missed' | 'jammed' | 'manual'
   final String triggeredBy; // 'schedule' | 'manual'
+  final DateTime dispensedAt;
+  final String? note;
 
-  DispenseLog({
+  DispenseEvent({
     required this.id,
-    this.scheduleId,
-    required this.compartmentId,
     required this.deviceId,
-    required this.dispensedAt,
+    this.compartmentId,
+    this.slot,
     required this.status,
     required this.triggeredBy,
+    required this.dispensedAt,
+    this.note,
   });
 
-  factory DispenseLog.fromJson(Map<String, dynamic> json) {
-    return DispenseLog(
+  factory DispenseEvent.fromJson(Map<String, dynamic> json) {
+    return DispenseEvent(
       id: json['id'],
-      scheduleId: json['schedule_id'],
-      compartmentId: json['compartment_id'],
       deviceId: json['device_id'],
-      dispensedAt: DateTime.parse(json['dispensed_at']),
+      compartmentId: json['compartment_id'],
+      slot: json['slot'],
       status: json['status'],
-      triggeredBy: json['triggered_by'],
+      triggeredBy: json['triggered_by'] ?? 'schedule',
+      dispensedAt: DateTime.parse(json['dispensed_at']),
+      note: json['note'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'schedule_id': scheduleId,
-      'compartment_id': compartmentId,
       'device_id': deviceId,
-      'dispensed_at': dispensedAt.toIso8601String(),
+      'compartment_id': compartmentId,
+      'slot': slot,
       'status': status,
       'triggered_by': triggeredBy,
+      'dispensed_at': dispensedAt.toIso8601String(),
+      'note': note,
     };
   }
 }
+

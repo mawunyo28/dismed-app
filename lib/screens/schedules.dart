@@ -20,8 +20,10 @@ class _SchedulesState extends State<Schedules> {
   @override
   void initState() {
     super.initState();
+
+    final deviceId = context.read<DeviceProvider>().selectedDeviceId;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ScheduleProvider>().fetchSchedules();
+      context.read<ScheduleProvider>().fetchSchedules(deviceId!);
       context.read<MedicationProvider>().fetchMedications();
     });
   }
@@ -169,11 +171,11 @@ class _SchedulesState extends State<Schedules> {
                   final timeStr =
                       '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
                   await context.read<ScheduleProvider>().addSchedule(
-                    medicationId: selectedMedId!,
                     compartmentId: med.compartmentId,
                     deviceId: deviceId,
-                    scheduledTime: timeStr,
                     daysOfWeek: selectedDays..sort(),
+                    dispenseTime: timeStr,
+                    // Todo: Pills per dispense
                   );
                   if (mounted) Navigator.pop(ctx);
                 },
@@ -238,7 +240,7 @@ class _SchedulesState extends State<Schedules> {
               itemBuilder: (context, i) {
                 final s = scheduleProvider.schedules[i];
                 final medName = medications
-                    .firstWhere((m) => m.id == s.medicationId, orElse: () => medications.first)
+                    .firstWhere((m) => m.id == s.id, orElse: () => medications.first)
                     .name;
 
                 return Card(
@@ -259,7 +261,7 @@ class _SchedulesState extends State<Schedules> {
                               ),
                             ),
                             Switch(
-                              value: s.isActive,
+                              value: s.active,
                               onChanged: (v) =>
                                   context.read<ScheduleProvider>().toggleActive(s.id, v),
                             ),
@@ -275,7 +277,7 @@ class _SchedulesState extends State<Schedules> {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              s.scheduledTime.substring(0, 5),
+                              s.dispenseTime.substring(0, 5),
                               style: GoogleFonts.roboto(
                                 textStyle: context.textTheme.bodyMedium,
                                 color: context.colors.primary,
@@ -338,4 +340,3 @@ class _SchedulesState extends State<Schedules> {
     );
   }
 }
-

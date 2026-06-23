@@ -1,45 +1,59 @@
+// models/device.dart
 class Device {
   final String id;
-  final String userId;
+  final String ownerId;
   final String deviceKey;
-  final String name;
-  final DateTime? lastSeen;
-  final DateTime createdAt;
-
-  bool get isOnline {
-    if (lastSeen == null) return false;
-    return DateTime.now().difference(lastSeen!).inMinutes < 5;
-  }
+  final String? label;
+  final String? firmware;
+  final DateTime? lastSeenAt;
+  final bool isOnline;
+  final DateTime? createdAt;
 
   Device({
     required this.id,
-    required this.userId,
+    required this.ownerId,
     required this.deviceKey,
-    required this.name,
-    this.lastSeen,
-    required this.createdAt,
+    this.label,
+    this.firmware,
+    this.lastSeenAt,
+    required this.isOnline,
+    this.createdAt,
   });
+
+  // isOnline comes from the DB column directly
+  // but we can also derive it locally as a fallback
+  bool get isOnlineDerived {
+    if (lastSeenAt == null) return false;
+    return DateTime.now().difference(lastSeenAt!).inMinutes < 5;
+  }
 
   factory Device.fromJson(Map<String, dynamic> json) {
     return Device(
       id: json['id'],
-      userId: json['user_id'],
+      ownerId: json['owner_id'],
       deviceKey: json['device_key'],
-      name: json['name'],
-      lastSeen: json['last_seen'] != null ? DateTime.parse(json['last_seen']) : null,
-      createdAt: DateTime.parse(json['created_at']),
+      label: json['label'],
+      firmware: json['firmware'],
+      lastSeenAt: json['last_seen_at'] != null
+          ? DateTime.parse(json['last_seen_at'])
+          : null,
+      isOnline: json['is_online'] ?? false,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user_id': userId,
+      'owner_id': ownerId,
       'device_key': deviceKey,
-      'name': name,
-      'last_seen': lastSeen?.toIso8601String(),
-      'created_at': createdAt.toIso8601String(),
+      'label': label,
+      'firmware': firmware,
+      'last_seen_at': lastSeenAt?.toIso8601String(),
+      'is_online': isOnline,
+      'created_at': createdAt?.toIso8601String(),
     };
   }
 }
-

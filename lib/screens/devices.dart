@@ -209,7 +209,7 @@ class _DevicesState extends State<Devices> {
                         ),
                       ),
                       title: Text(
-                        device.name,
+                        device.label!,
                         style: GoogleFonts.roboto(
                           fontWeight: FontWeight.w600,
                           textStyle: context.textTheme.titleMedium,
@@ -239,10 +239,10 @@ class _DevicesState extends State<Devices> {
                               ),
                             ],
                           ),
-                          if (device.lastSeen != null) ...[
+                          if (device.lastSeenAt != null) ...[
                             const SizedBox(height: 2),
                             Text(
-                              'Last seen: ${_formatLastSeen(device.lastSeen!)}',
+                              'Last seen: ${_formatLastSeen(device.lastSeenAt!)}',
                               style: GoogleFonts.roboto(textStyle: context.textTheme.bodySmall),
                             ),
                           ],
@@ -276,9 +276,9 @@ class _DevicesState extends State<Devices> {
                         ],
                         onSelected: (value) {
                           if (value == 'rename') {
-                            _showRenameDialog(device.id, device.name);
+                            _showRenameDialog(device.id, device.label!);
                           } else if (value == 'delete') {
-                            _confirmDelete(device.id, device.name);
+                            _confirmDelete(device.id, device.label!);
                           }
                         },
                       ),

@@ -14,7 +14,7 @@ class NotificationProvider extends ChangeNotifier {
   bool get loading => _loading;
   String? get error => _error;
 
-  int get unreadCount => _notifications.where((n) => !n.isRead).length;
+  int get unreadCount => _notifications.where((n) => !n.read).length;
 
   Future<void> fetchNotifications({bool unreadOnly = false}) async {
     _loading = true;
@@ -39,11 +39,12 @@ class NotificationProvider extends ChangeNotifier {
         final n = _notifications[index];
         _notifications[index] = DismedNotification(
           id: n.id,
-          userId: n.userId,
-          type: n.type,
-          message: n.message,
-          isRead: true,
+          ownerId: n.ownerId,
+          title: n.title,
+          body: n.body,
+          read: true,
           createdAt: n.createdAt,
+          category: n.category,
         );
         notifyListeners();
       }
@@ -60,11 +61,12 @@ class NotificationProvider extends ChangeNotifier {
       _notifications = _notifications
           .map(
             (n) => DismedNotification(
+              title: n.title,
               id: n.id,
-              userId: n.userId,
-              type: n.type,
-              message: n.message,
-              isRead: true,
+              ownerId: n.ownerId,
+              category: n.category,
+              body: n.body,
+              read: true,
               createdAt: n.createdAt,
             ),
           )

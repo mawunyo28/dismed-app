@@ -101,7 +101,7 @@ class _MedicationsState extends State<Medications> {
                         (c) => DropdownMenuItem(
                           value: c.id,
                           child: Text(
-                            'Slot ${c.slotNumber} — ${c.label}',
+                            'Slot ${c.slot} — ${c.medicationName}',
                             style: GoogleFonts.roboto(),
                           ),
                         ),
@@ -192,7 +192,7 @@ class _MedicationsState extends State<Medications> {
     final grouped = <int, List<dynamic>>{1: [], 2: [], 3: []};
     for (final med in medProvider.medications) {
       final comp = compartments.where((c) => c.id == med.compartmentId).firstOrNull;
-      final slot = comp?.slotNumber ?? 0;
+      final slot = comp?.slot ?? 0;
       grouped[slot] ??= [];
       grouped[slot]!.add(med);
     }
@@ -235,7 +235,7 @@ class _MedicationsState extends State<Medications> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        'Slot $slot — ${compartments.firstWhere((c) => c.slotNumber == slot, orElse: () => compartments.first).label}',
+                        'Slot $slot — ${compartments.firstWhere((c) => c.slot == slot, orElse: () => compartments.first).medicationName}',
                         style: GoogleFonts.roboto(
                           textStyle: context.textTheme.labelLarge,
                           fontWeight: FontWeight.bold,

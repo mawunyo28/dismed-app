@@ -1,51 +1,49 @@
+// models/schedule.dart
 class Schedule {
   final String id;
-  final String medicationId;
-  final String compartmentId;
   final String deviceId;
-  final String userId;
-  final String scheduledTime; // "HH:mm:ss"
+  final String compartmentId;
+  final String dispenseTime; // "HH:mm:ss"
   final List<int> daysOfWeek; // [0..6], 0 = Sunday
-  final bool isActive;
-  final DateTime createdAt;
+  final int pillsPerDose;
+  final bool active;
+  final DateTime? createdAt;
 
   Schedule({
     required this.id,
-    required this.medicationId,
-    required this.compartmentId,
     required this.deviceId,
-    required this.userId,
-    required this.scheduledTime,
+    required this.compartmentId,
+    required this.dispenseTime,
     required this.daysOfWeek,
-    required this.isActive,
-    required this.createdAt,
+    required this.pillsPerDose,
+    required this.active,
+    this.createdAt,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(
       id: json['id'],
-      medicationId: json['medication_id'],
-      compartmentId: json['compartment_id'],
       deviceId: json['device_id'],
-      userId: json['user_id'],
-      scheduledTime: json['scheduled_time'],
+      compartmentId: json['compartment_id'],
+      dispenseTime: json['dispense_time'],
       daysOfWeek: List<int>.from(json['days_of_week'] ?? []),
-      isActive: json['is_active'],
-      createdAt: DateTime.parse(json['created_at']),
+      pillsPerDose: json['pills_per_dose'] ?? 1,
+      active: json['active'] ?? true,
+      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'medication_id': medicationId,
-      'compartment_id': compartmentId,
       'device_id': deviceId,
-      'user_id': userId,
-      'scheduled_time': scheduledTime,
+      'compartment_id': compartmentId,
+      'dispense_time': dispenseTime,
       'days_of_week': daysOfWeek,
-      'is_active': isActive,
-      'created_at': createdAt.toIso8601String(),
+      'pills_per_dose': pillsPerDose,
+      'active': active,
+      'created_at': createdAt?.toIso8601String(),
     };
   }
 }
+

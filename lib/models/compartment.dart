@@ -1,37 +1,38 @@
 class Compartment {
   final String id;
   final String deviceId;
-  final int slotNumber;
-  final String label;
-  final int currentCount;
+  final int slot;
+  final String? medicationName;
+  final double? dosageMg;
+  final int pillCount;
   final int capacity;
-  final bool pendingDispense;
-  final DateTime createdAt;
-
-  double get fillRatio => currentCount / capacity;
-  bool get isLowStock => currentCount < 5;
+  final DateTime? updatedAt;
 
   Compartment({
     required this.id,
     required this.deviceId,
-    required this.slotNumber,
-    required this.label,
-    required this.currentCount,
+    required this.slot,
+    this.medicationName,
+    this.dosageMg,
+    required this.pillCount,
     required this.capacity,
-    required this.pendingDispense,
-    required this.createdAt,
+    this.updatedAt,
   });
+
+  double get fillRatio => capacity == 0 ? 0 : pillCount / capacity;
+  bool get isLowStock => pillCount < 5;
+  bool get isEmpty => pillCount == 0;
 
   factory Compartment.fromJson(Map<String, dynamic> json) {
     return Compartment(
       id: json['id'],
       deviceId: json['device_id'],
-      slotNumber: json['slot_number'],
-      label: json['label'],
-      currentCount: json['current_count'],
-      capacity: json['capacity'],
-      pendingDispense: json['pending_dispense'],
-      createdAt: json["createdAt"],
+      slot: json['slot'],
+      medicationName: json['medication_name'],
+      dosageMg: json['dosage_mg'] != null ? (json['dosage_mg'] as num).toDouble() : null,
+      pillCount: json['pill_count'] ?? 0,
+      capacity: json['capacity'] ?? 30,
+      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
     );
   }
 
@@ -39,12 +40,12 @@ class Compartment {
     return {
       'id': id,
       'device_id': deviceId,
-      'slot_number': slotNumber,
-      'label': label,
-      'current_count': currentCount,
+      'slot': slot,
+      'medication_name': medicationName,
+      'dosage_mg': dosageMg,
+      'pill_count': pillCount,
       'capacity': capacity,
-      'pending_dispense': pendingDispense,
-      'createdAt': createdAt,
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 }

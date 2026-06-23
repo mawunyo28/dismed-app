@@ -5,14 +5,14 @@ import '../models/dispense_log.dart';
 import '../services/dispense_service.dart';
 
 class DispenseProvider extends ChangeNotifier {
-  List<DispenseLog> _logs = [];
-  List<DispenseLog> _todayLogs = [];
+  List<DispenseEvent> _logs = [];
+  List<DispenseEvent> _todayLogs = [];
   bool _loading = false;
   String? _error;
   RealtimeChannel? _channel;
 
-  List<DispenseLog> get logs => _logs;
-  List<DispenseLog> get todayLogs => _todayLogs;
+  List<DispenseEvent> get logs => _logs;
+  List<DispenseEvent> get todayLogs => _todayLogs;
   bool get loading => _loading;
   String? get error => _error;
 
@@ -21,7 +21,7 @@ class DispenseProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      _logs = await DispenseService.fetchRecentLogs(deviceId, days: days);
+      _logs = await DispenseService.fetchRecentEvents(deviceId, days: days);
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -33,7 +33,7 @@ class DispenseProvider extends ChangeNotifier {
   Future<void> fetchTodayLogs(String deviceId) async {
     _error = null;
     try {
-      _todayLogs = await DispenseService.fetchTodayLogs(deviceId);
+      _todayLogs = await DispenseService.fetchTodayEvents(deviceId);
       notifyListeners();
     } catch (e) {
       _error = e.toString();
@@ -54,7 +54,7 @@ class DispenseProvider extends ChangeNotifier {
             value: deviceId,
           ),
           callback: (payload) {
-            final log = DispenseLog.fromJson(payload.newRecord);
+            final log = DispenseEvent.fromJson(payload.newRecord);
             _logs.insert(0, log);
             // also add to today if dispensed today
             final today = DateTime.now();

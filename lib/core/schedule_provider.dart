@@ -13,15 +13,15 @@ class ScheduleProvider extends ChangeNotifier {
   bool get loading => _loading;
   String? get error => _error;
 
-  List<Schedule> byMedication(String medicationId) =>
-      _schedules.where((s) => s.medicationId == medicationId).toList();
+  // List<Schedule> byMedication(String medicationId) =>
+  //     _schedules.where((s) => s.medicationId == medicationId).toList();
 
-  Future<void> fetchSchedules() async {
+  Future<void> fetchSchedules(String deviceId) async {
     _loading = true;
     _error = null;
     notifyListeners();
     try {
-      _schedules = await ScheduleService.fetchSchedules();
+      _schedules = await ScheduleService.fetchSchedules(deviceId);
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -42,20 +42,20 @@ class ScheduleProvider extends ChangeNotifier {
   }
 
   Future<void> addSchedule({
-    required String medicationId,
-    required String compartmentId,
     required String deviceId,
-    required String scheduledTime,
+    required String compartmentId,
+    required String dispenseTime,
     required List<int> daysOfWeek,
+    int pillsPerDose = 1,
   }) async {
     _error = null;
     try {
       final schedule = await ScheduleService.addSchedule(
-        medicationId: medicationId,
         compartmentId: compartmentId,
+        dispenseTime: dispenseTime,
         deviceId: deviceId,
-        scheduledTime: scheduledTime,
         daysOfWeek: daysOfWeek,
+        pillsPerDose: pillsPerDose,
       );
       _schedules.add(schedule);
       notifyListeners();
@@ -65,23 +65,22 @@ class ScheduleProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> toggleActive(String id, bool isActive) async {
+  Future<void> toggleActive(String id, bool active) async {
     _error = null;
     try {
-      await ScheduleService.toggleActive(id, isActive);
+      await ScheduleService.toggleActive(id, active);
       final index = _schedules.indexWhere((s) => s.id == id);
       if (index != -1) {
         final s = _schedules[index];
         _schedules[index] = Schedule(
           id: s.id,
-          medicationId: s.medicationId,
           compartmentId: s.compartmentId,
           deviceId: s.deviceId,
-          userId: s.userId,
-          scheduledTime: s.scheduledTime,
+          dispenseTime: s.dispenseTime,
           daysOfWeek: s.daysOfWeek,
-          isActive: isActive,
+          active: active,
           createdAt: s.createdAt,
+          pillsPerDose: s.pillsPerDose,
         );
         notifyListeners();
       }
