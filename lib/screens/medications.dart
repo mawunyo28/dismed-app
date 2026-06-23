@@ -1,3 +1,4 @@
+// screens/medications.dart
 import 'package:dismed/core/compartment_provider.dart';
 import 'package:dismed/core/device_provider.dart';
 import 'package:dismed/core/medication_provider.dart';
@@ -291,3 +292,36 @@ class _MedicationsState extends State<Medications> {
   }
 }
 
+class _SheetTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final IconData icon;
+  final String? Function(String?)? validator;
+
+  const _SheetTextField({
+    required this.controller,
+    required this.hint,
+    required this.icon,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      validator: validator,
+      style: GoogleFonts.roboto(textStyle: context.textTheme.labelLarge),
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: context.colors.surface,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        hintText: hint,
+        hintStyle: GoogleFonts.roboto(
+          textStyle: context.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w300),
+        ),
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+      ),
+    );
+  }
+}
