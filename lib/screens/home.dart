@@ -1,11 +1,13 @@
+import 'package:dismed/core/dispense_provider.dart';
+import 'package:dismed/core/notification_provider.dart';
 import 'package:dismed/screens/care_giver.dart';
 import 'package:dismed/screens/dashboard.dart';
 import 'package:dismed/screens/devices.dart';
-import 'package:dismed/screens/register_screen.dart';
 import 'package:dismed/screens/medications.dart';
 import 'package:dismed/screens/schedules.dart';
 import 'package:dismed/screens/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,6 +18,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var currentPageIndex = 0;
+
+  @override
+  void dispose() {
+    context.read<DispenseProvider>().unsubscribe();
+    context.read<NotificationProvider>().unsubscribe();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
