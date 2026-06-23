@@ -1,5 +1,11 @@
 import 'package:dismed/core/app_theme.dart';
 import 'package:dismed/core/auth_provider.dart';
+import 'package:dismed/core/compartment_provider.dart';
+import 'package:dismed/core/device_provider.dart';
+import 'package:dismed/core/dispense_provider.dart';
+import 'package:dismed/core/medication_provider.dart';
+import 'package:dismed/core/notification_provider.dart';
+import 'package:dismed/core/schedule_provider.dart';
 import 'package:dismed/core/theme_provider.dart';
 import 'package:dismed/screens/home.dart';
 import 'package:dismed/screens/login_screen.dart';
@@ -25,6 +31,12 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => DispenseProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleProvider()),
+        ChangeNotifierProvider(create: (_) => CompartmentProvider()),
+        ChangeNotifierProvider(create: (_) => DeviceProvider()),
+        ChangeNotifierProvider(create: (_) => MedicationProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: MyApp(),
     ),
