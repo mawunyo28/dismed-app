@@ -1,6 +1,6 @@
 class Medication {
   final String id;
-  final String userId;
+  final String deviceId;
   final String compartmentId;
   final String name;
   final String dosage;
@@ -10,7 +10,7 @@ class Medication {
 
   Medication({
     required this.id,
-    required this.userId,
+    required this.deviceId,
     required this.compartmentId,
     required this.name,
     required this.dosage,
@@ -22,7 +22,7 @@ class Medication {
   factory Medication.fromJson(Map<String, dynamic> json) {
     return Medication(
       id: json['id'],
-      userId: json['user_id'],
+      deviceId: json['user_id'],
       compartmentId: json['compartment_id'],
       name: json['name'],
       dosage: json['dosage'],
@@ -35,7 +35,7 @@ class Medication {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user_id': userId,
+      'device_id': deviceId,
       'compartment_id': compartmentId,
       'name': name,
       'dosage': dosage,

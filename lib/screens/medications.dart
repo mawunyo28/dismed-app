@@ -1,4 +1,3 @@
-// screens/medications.dart
 import 'package:dismed/core/compartment_provider.dart';
 import 'package:dismed/core/device_provider.dart';
 import 'package:dismed/core/medication_provider.dart';
@@ -87,7 +86,7 @@ class _MedicationsState extends State<Medications> {
                 const SizedBox(height: 14),
                 // Compartment picker
                 DropdownButtonFormField<String>(
-                  value: selectedCompartmentId,
+                  initialValue: selectedCompartmentId,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: ctx.colors.surface,

@@ -1,6 +1,8 @@
+import 'package:dismed/core/compartment_provider.dart';
 import 'package:dismed/core/dispense_provider.dart';
 import 'package:dismed/core/notification_provider.dart';
 import 'package:dismed/screens/care_giver.dart';
+import 'package:dismed/screens/compartment.dart';
 import 'package:dismed/screens/dashboard.dart';
 import 'package:dismed/screens/devices.dart';
 import 'package:dismed/screens/medications.dart';
@@ -32,7 +34,8 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: NavigationBar(
         destinations: [
           NavigationDestination(icon: Icon(Icons.dashboard_rounded), label: "Dashboard"),
-          NavigationDestination(icon: Icon(Icons.medication_rounded), label: "Medications"),
+          // NavigationDestination(icon: Icon(Icons.medication_rounded), label: "Med"),
+          NavigationDestination(icon: Icon(Icons.pie_chart_rounded), label: "Compartment"),
           NavigationDestination(icon: Icon(Icons.calendar_month_rounded), label: "Schedules"),
           NavigationDestination(icon: Icon(Icons.devices_rounded), label: "Device"),
           NavigationDestination(icon: Icon(Icons.health_and_safety_rounded), label: "Care giver"),
@@ -49,7 +52,8 @@ class _HomeState extends State<Home> {
       // Todo: Implement the other screens
       body: [
         Dashboard(),
-        Medications(),
+        // Medications(),
+        Compartments(),
         Schedules(),
         Devices(),
         CareGiver(),

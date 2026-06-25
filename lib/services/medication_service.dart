@@ -6,7 +6,7 @@ class MedicationService {
 
   static Future<List<Medication>> fetchMedications() async {
     final rows = await _db
-        .select('*, compartments(slot_number, label)')
+        .select('*, compartments(slot, medication_name)')
         .eq('user_id', SupabaseService.ownerId)
         .order('created_at');
     return rows.map((r) => Medication.fromJson(r)).toList();

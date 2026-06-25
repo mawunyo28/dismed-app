@@ -33,6 +33,8 @@ class _SchedulesState extends State<Schedules> {
     final compartments = context.read<CompartmentProvider>().compartments;
     final deviceId = context.read<DeviceProvider>().selectedDeviceId;
 
+    double _pillsPerDose = 2.0;
+
     if (deviceId == null) {
       ScaffoldMessenger.of(
         context,
@@ -40,7 +42,9 @@ class _SchedulesState extends State<Schedules> {
       return;
     }
 
-    String? selectedMedId = medications.firstOrNull?.id;
+    String? selectedCompId = compartments.firstOrNull?.id;
+
+    // String? selectedMedId = medications.firstOrNull?.id;
     TimeOfDay selectedTime = TimeOfDay.now();
     List<int> selectedDays = [1, 2, 3, 4, 5]; // Mon–Fri default
 
@@ -68,7 +72,7 @@ class _SchedulesState extends State<Schedules> {
 
               // Medication picker
               DropdownButtonFormField<String>(
-                value: selectedMedId,
+                initialValue: selectedCompId,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: ctx.colors.surface,
@@ -77,15 +81,15 @@ class _SchedulesState extends State<Schedules> {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                   labelText: 'Medication',
                 ),
-                items: medications
+                items: compartments
                     .map(
                       (m) => DropdownMenuItem(
                         value: m.id,
-                        child: Text(m.name, style: GoogleFonts.roboto()),
+                        child: Text(m.medicationName ?? "${m.slot}", style: GoogleFonts.roboto()),
                       ),
                     )
                     .toList(),
-                onChanged: (v) => setSheetState(() => selectedMedId = v),
+                onChanged: (v) => setSheetState(() => selectedCompId = v),
               ),
               const SizedBox(height: 14),
 
@@ -112,6 +116,22 @@ class _SchedulesState extends State<Schedules> {
                   ),
                 ),
               ),
+              const SizedBox(height: 14),
+
+              // pill selected
+              Slider(
+                value: _pillsPerDose,
+                max: 10.0,
+                divisions: 9,
+                min: 1,
+                label: _pillsPerDose.toString(),
+                onChanged: (double value) {
+                  setSheetState(() {
+                    _pillsPerDose = value;
+                  });
+                },
+              ),
+
               const SizedBox(height: 14),
 
               // Day picker
@@ -166,15 +186,16 @@ class _SchedulesState extends State<Schedules> {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 ),
                 onPressed: () async {
-                  if (selectedMedId == null || selectedDays.isEmpty) return;
-                  final med = medications.firstWhere((m) => m.id == selectedMedId);
+                  if (selectedCompId == null || selectedDays.isEmpty) return;
+                  final comp = compartments.firstWhere((c) => c.id == selectedCompId);
                   final timeStr =
                       '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}:00';
                   await context.read<ScheduleProvider>().addSchedule(
-                    compartmentId: med.compartmentId,
+                    compartmentId: comp.id,
                     deviceId: deviceId,
                     daysOfWeek: selectedDays..sort(),
                     dispenseTime: timeStr,
+                    pillsPerDose: _pillsPerDose.toInt(),
                     // Todo: Pills per dispense
                   );
                   if (mounted) Navigator.pop(ctx);
@@ -197,7 +218,7 @@ class _SchedulesState extends State<Schedules> {
   @override
   Widget build(BuildContext context) {
     final scheduleProvider = context.watch<ScheduleProvider>();
-    final medications = context.watch<MedicationProvider>().medications;
+    final compartment = context.watch<CompartmentProvider>().compartments;
 
     return Scaffold(
       appBar: AppBar(
@@ -239,9 +260,9 @@ class _SchedulesState extends State<Schedules> {
               separatorBuilder: (_, __) => const SizedBox(height: 10),
               itemBuilder: (context, i) {
                 final s = scheduleProvider.schedules[i];
-                final medName = medications
-                    .firstWhere((m) => m.id == s.id, orElse: () => medications.first)
-                    .name;
+                final compName = compartment
+                    .firstWhere((c) => c.id == s.compartmentId, orElse: () => compartment.first)
+                    .medicationName;
 
                 return Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -254,7 +275,7 @@ class _SchedulesState extends State<Schedules> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              medName,
+                              compName ?? "Unknown",
                               style: GoogleFonts.roboto(
                                 fontWeight: FontWeight.w600,
                                 textStyle: context.textTheme.titleMedium,

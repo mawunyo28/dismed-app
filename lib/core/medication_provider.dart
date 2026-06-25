@@ -73,13 +73,13 @@ class MedicationProvider extends ChangeNotifier {
         final m = _medications[index];
         _medications[index] = Medication(
           id: m.id,
-          userId: m.userId,
           compartmentId: m.compartmentId,
           name: name ?? m.name,
           dosage: dosage ?? m.dosage,
           color: color ?? m.color,
           notes: notes ?? m.notes,
           createdAt: m.createdAt,
+          deviceId: m.deviceId,
         );
         notifyListeners();
       }
