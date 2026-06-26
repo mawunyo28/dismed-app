@@ -3,28 +3,39 @@ import 'package:dismed/services/supabase_service.dart';
 class ConditionsService {
   static final _db = SupabaseService.client.from("medibot");
 
-  /// Fetches the most recent temperature reading
   static Future<double> getTemperature() async {
-    // Use ascending: false to get the newest record first
-    final row = await _db
-        .select("temperature")
-        .order("created_at", ascending: false)
-        .limit(1)
-        .single();
+    try {
+      final row = await _db
+          .select("temperature")
+          .order("created_at", ascending: false)
+          .limit(1)
+          .single();
 
-    // Ensure we safely cast the dynamic value to a double
-    return (row["temperature"] as num).toDouble();
+      // 1. Check your terminal for this print statement:
+      print("DEBUG Temp Row: $row");
+
+      return (row["temperature"] as num).toDouble();
+    } catch (e) {
+      print("DEBUG Temp Error: $e");
+      rethrow;
+    }
   }
 
-  /// Fetches the most recent humidity reading
   static Future<double> getHumidity() async {
-    final row = await _db
-        .select("humidity")
-        .order("created_at", ascending: false)
-        .limit(1)
-        .single();
+    try {
+      final row = await _db
+          .select("humidity")
+          .order("created_at", ascending: false)
+          .limit(1)
+          .single();
 
-    return (row["humidity"] as num).toDouble();
+      // 2. Check your terminal for this print statement:
+      print("DEBUG Humidity Row: $row");
+
+      return (row["humidity"] as num).toDouble();
+    } catch (e) {
+      print("DEBUG Humidity Error: $e");
+      rethrow;
+    }
   }
 }
-

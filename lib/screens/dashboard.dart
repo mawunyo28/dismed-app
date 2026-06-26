@@ -28,18 +28,18 @@ class _DashboardState extends State<Dashboard> {
     final deviceProvider = context.read<DeviceProvider>();
     await deviceProvider.fetchDevices();
 
-    final conditionProvider = context.read<ConditionProvider>();
-
     final deviceId = deviceProvider.selectedDeviceId;
     if (deviceId == null) return;
 
+    // Run everything in parallel to reduce load time
     await Future.wait([
       context.read<ScheduleProvider>().fetchTodaySchedules(deviceId),
       context.read<DispenseProvider>().fetchRecentLogs(deviceId),
       context.read<NotificationProvider>().fetchNotifications(unreadOnly: true),
+      context.read<ConditionProvider>().fetchAllConditions(), // <-- Added this
     ]);
 
-    // start realtime
+    // Start realtime subscriptions
     context.read<DispenseProvider>().subscribeRealtime(deviceId);
     context.read<NotificationProvider>().subscribeRealtime(context.read<AuthProvider>().user!.id);
   }
@@ -162,16 +162,12 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: 50,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         spacing: 5.5,
                         children: [
-                          Text(
-                            "Temperature",
-                            style: GoogleFonts.audiowide(textStyle: context.textTheme.labelLarge),
-                          ),
+                          Text("Temperature", style: GoogleFonts.audiowide()),
 
                           Row(
                             children: [
@@ -179,6 +175,7 @@ class _DashboardState extends State<Dashboard> {
                               SizedBox(width: 20),
                               Text(
                                 "${conditionProvider.temperature == 0.0 ? "22" : conditionProvider.temperature.toString()} °C",
+                                style: GoogleFonts.audiowide(),
                               ),
                             ],
                           ),
@@ -188,7 +185,6 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   Expanded(
                     child: SizedBox(
-                      height: 50,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +200,8 @@ class _DashboardState extends State<Dashboard> {
                               Icon(Icons.wind_power_rounded),
                               SizedBox(width: 20),
                               Text(
-                                "${conditionProvider.humidity == 0.0 ? "70" : conditionProvider.humidity.toString()} %",
+                                "${conditionProvider.humidity == 0.0 ? "78" : conditionProvider.humidity.toStringAsFixed(1)} %",
+                                style: GoogleFonts.audiowide(),
                               ),
                             ],
                           ),
