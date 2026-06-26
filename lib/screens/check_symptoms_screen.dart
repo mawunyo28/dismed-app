@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart';
 
-// ── Types matching your gemini.ts response ──────────────────────────────────
 
 class DetectedIndicator {
   final String indicator;
@@ -104,6 +103,9 @@ class _CheckSymptomsState extends State<CheckSymptoms> with SingleTickerProvider
   final _symptomController = TextEditingController();
   final _durationController = TextEditingController();
   final _severityController = TextEditingController();
+  final _weightController = TextEditingController(text: '58');
+
+
 
   // State
   double _painLevel = 4;
@@ -111,6 +113,7 @@ class _CheckSymptomsState extends State<CheckSymptoms> with SingleTickerProvider
   String? _error;
   AnalysisResult? _result;
   bool _showTechnical = false;
+  double _weight = 58.0;
 
   // Speech
   final _speech = SpeechToText();
@@ -191,6 +194,7 @@ class _CheckSymptomsState extends State<CheckSymptoms> with SingleTickerProvider
           'duration': _durationController.text.trim(),
           'severity': _severityController.text.trim(),
           'pain_scale': _painLevel.round(),
+          'weight':  _weight,
         }),
       );
 
@@ -300,26 +304,27 @@ class _CheckSymptomsState extends State<CheckSymptoms> with SingleTickerProvider
                 children: [
                   Expanded(
                     child: _VoiceField(
-                      controller: _tempController,
+                      controller: _weightController,
                       label: 'Weight (Kg)',
                       icon: Icons.thermostat_rounded,
                       keyboardType: TextInputType.number,
+                      
                       speechReady: _speechReady,
                       listening: _listening && _activeController == _tempController,
                       onMicTap: () => _startListening(_tempController, 'Temperature'),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
-                    child: _VoiceField(
-                      controller: _bpController,
-                      label: 'Blood Pressure',
-                      icon: Icons.favorite_rounded,
-                      speechReady: _speechReady,
-                      listening: _listening && _activeController == _bpController,
-                      onMicTap: () => _startListening(_bpController, 'Blood Pressure'),
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: _VoiceField(
+                  //     controller: _bpController,
+                  //     label: 'Blood Pressure',
+                  //     icon: Icons.favorite_rounded,
+                  //     speechReady: _speechReady,
+                  //     listening: _listening && _activeController == _bpController,
+                  //     onMicTap: () => _startListening(_bpController, 'Blood Pressure'),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
