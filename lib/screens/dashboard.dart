@@ -217,6 +217,40 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                   ),
+
+            const SizedBox(height: 20),
+
+            Text(
+              "Health AI",
+              style: GoogleFonts.roboto(
+                textStyle: context.textTheme.titleMedium,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            Container(
+              padding: EdgeInsetsGeometry.all(20),
+
+              decoration: BoxDecoration(
+                color: context.colors.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(21),
+              ),
+
+              child: ElevatedButton(
+                autofocus: true,
+                onPressed: () {
+                  Navigator.pushNamed(context, "/ai");
+                },
+                child: Text(
+                  "Run Ai Diagnostics",
+                  style: GoogleFonts.audiowide(
+                    textStyle: context.textTheme.titleMedium,
+                    color: context.colors.onPrimaryContainer,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

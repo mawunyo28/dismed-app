@@ -7,6 +7,7 @@ import 'package:dismed/core/medication_provider.dart';
 import 'package:dismed/core/notification_provider.dart';
 import 'package:dismed/core/schedule_provider.dart';
 import 'package:dismed/core/theme_provider.dart';
+import 'package:dismed/screens/check_symptoms_screen.dart';
 import 'package:dismed/screens/home.dart';
 import 'package:dismed/screens/login_screen.dart';
 import 'package:dismed/screens/splash_page.dart';
@@ -27,20 +28,20 @@ Future<void> main() async {
   );
 
   runApp(
-  MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => AuthProvider()),
-      ChangeNotifierProvider(create: (_) => ThemeProvider()),
-      ChangeNotifierProvider(create: (_) => DeviceProvider()),
-      ChangeNotifierProvider(create: (_) => CompartmentProvider()),
-      ChangeNotifierProvider(create: (_) => MedicationProvider()),
-      ChangeNotifierProvider(create: (_) => ScheduleProvider()),
-      ChangeNotifierProvider(create: (_) => DispenseProvider()),
-      ChangeNotifierProvider(create: (_) => NotificationProvider()),
-    ],
-    child: const MyApp(),
-  ),
-);
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => DeviceProvider()),
+        ChangeNotifierProvider(create: (_) => CompartmentProvider()),
+        ChangeNotifierProvider(create: (_) => MedicationProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleProvider()),
+        ChangeNotifierProvider(create: (_) => DispenseProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -59,6 +60,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/splash": (context) => SplashPage(),
         "/register": (context) => CreateAccountScreen(),
+        "/ai": (context) => CheckSymptoms(),
 
         "/home": (context) => Home(),
         "/login": (context) => LoginScreen(),

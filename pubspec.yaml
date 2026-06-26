@@ -39,6 +39,9 @@ dependencies:
   supabase_flutter: ^2.15.0
   flutter_dotenv: ^6.0.1
   http: ^1.6.0
+  onesignal_flutter: ^5.6.3
+  speech_to_text: ^7.4.0
+  avatar_glow: ^3.0.1
 
 dev_dependencies:
   flutter_test:

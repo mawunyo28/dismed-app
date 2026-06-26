@@ -21,15 +21,15 @@ class _SchedulesState extends State<Schedules> {
   void initState() {
     super.initState();
 
-    final deviceId = context.read<DeviceProvider>().selectedDeviceId;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ScheduleProvider>().fetchSchedules(deviceId!);
+      final deviceId = context.read<DeviceProvider>().selectedDeviceId;
+      if (deviceId == null) return;
+      context.read<ScheduleProvider>().fetchSchedules(deviceId);
       context.read<MedicationProvider>().fetchMedications();
     });
   }
 
   void _showAddScheduleSheet() {
-    final medications = context.read<MedicationProvider>().medications;
     final compartments = context.read<CompartmentProvider>().compartments;
     final deviceId = context.read<DeviceProvider>().selectedDeviceId;
 
@@ -38,10 +38,17 @@ class _SchedulesState extends State<Schedules> {
     if (deviceId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Select a device first from the Device tab')));
+      ).showSnackBar(const SnackBar(content: Text('Select a device first from the Devices tab')));
       return;
     }
 
+    // guard — don't open sheet if no compartments loaded
+    if (compartments.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('No compartments found for this device')));
+      return;
+    }
     String? selectedCompId = compartments.firstOrNull?.id;
 
     // String? selectedMedId = medications.firstOrNull?.id;
@@ -261,8 +268,7 @@ class _SchedulesState extends State<Schedules> {
               itemBuilder: (context, i) {
                 final s = scheduleProvider.schedules[i];
                 final compName = compartment
-                    .firstWhere((c) => c.id == s.compartmentId, orElse: () => compartment.first)
-                    .medicationName;
+                    .where((c) => c.id == s.compartmentId).firstOrNull?.medicationName;
 
                 return Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
