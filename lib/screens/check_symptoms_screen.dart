@@ -267,29 +267,60 @@ class _CheckSymptomsState extends State<CheckSymptoms> with SingleTickerProvider
             ),
           ),
           const SizedBox(height: 10),
-          Row(
+          Column(
             children: [
-              Expanded(
-                child: _VoiceField(
-                  controller: _tempController,
-                  label: 'Temperature (°C)',
-                  icon: Icons.thermostat_rounded,
-                  keyboardType: TextInputType.number,
-                  speechReady: _speechReady,
-                  listening: _listening && _activeController == _tempController,
-                  onMicTap: () => _startListening(_tempController, 'Temperature'),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _VoiceField(
+                      controller: _tempController,
+                      label: 'Temperature (°C)',
+                      icon: Icons.thermostat_rounded,
+                      keyboardType: TextInputType.number,
+                      speechReady: _speechReady,
+                      listening: _listening && _activeController == _tempController,
+                      onMicTap: () => _startListening(_tempController, 'Temperature'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _VoiceField(
+                      controller: _bpController,
+                      label: 'Blood Pressure',
+                      icon: Icons.favorite_rounded,
+                      speechReady: _speechReady,
+                      listening: _listening && _activeController == _bpController,
+                      onMicTap: () => _startListening(_bpController, 'Blood Pressure'),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _VoiceField(
-                  controller: _bpController,
-                  label: 'Blood Pressure',
-                  icon: Icons.favorite_rounded,
-                  speechReady: _speechReady,
-                  listening: _listening && _activeController == _bpController,
-                  onMicTap: () => _startListening(_bpController, 'Blood Pressure'),
-                ),
+              const SizedBox(height: 40),
+              Row(
+                children: [
+                  Expanded(
+                    child: _VoiceField(
+                      controller: _tempController,
+                      label: 'Weight (Kg)',
+                      icon: Icons.thermostat_rounded,
+                      keyboardType: TextInputType.number,
+                      speechReady: _speechReady,
+                      listening: _listening && _activeController == _tempController,
+                      onMicTap: () => _startListening(_tempController, 'Temperature'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _VoiceField(
+                      controller: _bpController,
+                      label: 'Blood Pressure',
+                      icon: Icons.favorite_rounded,
+                      speechReady: _speechReady,
+                      listening: _listening && _activeController == _bpController,
+                      onMicTap: () => _startListening(_bpController, 'Blood Pressure'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

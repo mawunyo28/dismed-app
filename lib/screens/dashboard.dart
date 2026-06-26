@@ -1,4 +1,5 @@
 // screens/dashboard.dart
+import 'package:dismed/core/condition_provider.dart';
 import 'package:dismed/core/device_provider.dart';
 import 'package:dismed/core/dispense_provider.dart';
 import 'package:dismed/core/notification_provider.dart';
@@ -27,6 +28,8 @@ class _DashboardState extends State<Dashboard> {
     final deviceProvider = context.read<DeviceProvider>();
     await deviceProvider.fetchDevices();
 
+    final conditionProvider = context.read<ConditionProvider>();
+
     final deviceId = deviceProvider.selectedDeviceId;
     if (deviceId == null) return;
 
@@ -47,6 +50,7 @@ class _DashboardState extends State<Dashboard> {
     final scheduleProvider = context.watch<ScheduleProvider>();
     final dispenseProvider = context.watch<DispenseProvider>();
     final notifProvider = context.watch<NotificationProvider>();
+    final conditionProvider = context.watch<ConditionProvider>();
 
     final device = deviceProvider.selectedDevice;
 
@@ -135,6 +139,82 @@ class _DashboardState extends State<Dashboard> {
               ),
 
             const SizedBox(height: 20),
+
+            Text(
+              "Storage Conditions",
+              style: GoogleFonts.roboto(
+                textStyle: context.textTheme.titleMedium,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Container(
+              padding: EdgeInsetsGeometry.all(20),
+              decoration: BoxDecoration(
+                color: context.colors.surfaceContainerLow,
+
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 5.5,
+                        children: [
+                          Text(
+                            "Temperature",
+                            style: GoogleFonts.audiowide(textStyle: context.textTheme.labelLarge),
+                          ),
+
+                          Row(
+                            children: [
+                              Icon(Icons.thermostat),
+                              SizedBox(width: 20),
+                              Text(
+                                "${conditionProvider.temperature == 0.0 ? "22" : conditionProvider.temperature.toString()} °C",
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 5.5,
+                        children: [
+                          Text(
+                            "Humidity",
+                            style: GoogleFonts.audiowide(textStyle: context.textTheme.labelLarge),
+                          ),
+
+                          Row(
+                            children: [
+                              Icon(Icons.wind_power_rounded),
+                              SizedBox(width: 20),
+                              Text(
+                                "${conditionProvider.humidity == 0.0 ? "70" : conditionProvider.humidity.toString()} %",
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
             // Today's schedules
             Text(
